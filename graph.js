@@ -7,19 +7,19 @@ var currMenu = undefined;
 
 
 class Node{
-    constructor(name){
+    constructor(name, x, y){
         this.edges = []
         this.prevPosition = {x: 0, y: 0};
+
         this.div = document.createElement("div");
         this.div.className = "node";
-        this.div.style.top = 0;
-        this.div.style.left = 0;
+        this.div.style.top = y + "px";
+        this.div.style.left = (x + graph.offsetLeft) + "px";
         this.div.innerHTML = name;
         this.div.draggable = true;
         graph.appendChild(this.div);
 
         this.reset();
-
     }
 
     reset(){
@@ -31,8 +31,14 @@ class Node{
         });
 
         this.div.addEventListener("dragend", (e) => {
-            this.div.style.left = parseInt(this.div.style.left) + e.screenX - this.prevPosition.x + "px";
-            this.div.style.top = parseInt(this.div.style.top) + e.screenY - this.prevPosition.y + "px";
+            var newPos = {
+                x: parseInt(this.div.style.left) + e.screenX - this.prevPosition.x,
+                y: parseInt(this.div.style.top) + e.screenY - this.prevPosition.y
+            }
+            if(newPos.x < graph.offsetLeft)
+                newPos.x = graph.offsetLeft;
+            this.div.style.left = newPos.x + "px";
+            this.div.style.top = newPos.y + "px";
             this.prevPosition.x = 0;
             this.prevPosition.y = 0;
 
@@ -67,7 +73,7 @@ class Node{
     }
     delete(){
         this.div.remove();
-        for(var i = 0; i < this.edges.length; i++)
+        for(var i = this.edges.length - 1; i > -1; i--)
             this.edges[i].delete();
         nodes.splice(nodes.indexOf(this), 1);
     }
@@ -151,10 +157,14 @@ document.addEventListener("click", (e) => {
     }
 });
 
+function clean(){
+    for(var i = nodes.length - 1; i > -1; i--)
+        nodes[i].delete();
+}
 //-------------------------------------------------------------------//
 //-------------------------Fonctions html----------------------------//
 //-------------------------------------------------------------------//
-function addEdge(){
+function btnAddEdge(){
     hideContextMenu();
     if(nodes.length > 1){
         document.querySelector("body").style.cursor = "crosshair";
@@ -162,7 +172,8 @@ function addEdge(){
             if(nodes[i] !== currMenu){
                 nodes[i].addEvent((e) => {
                     document.querySelector("body").style.cursor = "default";
-                    edges = edges.concat(new Edge(currMenu, e));
+                    addEdge(currMenu, e);
+                    addTextToEditor("addEdge(nodes[" + nodes.indexOf(currMenu) + "], nodes[" + nodes.indexOf(e) + "]);");
                     for(var i = 0; i < nodes.length; i++){
                         nodes[i].removeEvent();
                     }
@@ -171,9 +182,17 @@ function addEdge(){
         }
     }
 }
+function btnAddNode(){
+    nodes = nodes.concat(new Node('', 0, 0));
+    addTextToEditor('addNode("", 0, 0);');
+}
 
-function addNode(){
-    nodes = nodes.concat(new Node(""));
+function addEdge(a,b){
+    edges = edges.concat(new Edge(a, b));
+}
+
+function addNode(name, x, y){
+    nodes = nodes.concat(new Node(name, x, y));
 }
 
 function rename(){
@@ -185,6 +204,7 @@ function submitRename(){
     var input = document.getElementById("namefield");
     currMenu.rename(input.value);
 }
+
 
 function del(e){
     hideContextMenu();

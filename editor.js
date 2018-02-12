@@ -1,6 +1,7 @@
 var editor = document.getElementById("editor");
 var textField = document.getElementById("textfield");
 var cursor = document.getElementById("cursor");
+var customConsole = document.getElementById("console");
 
 textField.addEventListener("keydown", (e) => {
     switch(e.key){
@@ -83,7 +84,7 @@ textField.addEventListener("keydown", (e) => {
             
             break;
         default:
-            if(e.ctrlKey || e.altKey)
+            if(e.ctrlKey)
                 break;
             var elem = document.createElement("span");
             elem.innerText = e.key;
@@ -98,4 +99,19 @@ textField.addEventListener("click", (e) => {
     }
 })
 
+function exeCode(){
+    clean();
+    try {
+        eval(textField.textContent.trim()); 
+    } catch (e) {
+        console.log(e);
+    }
+}
 textField.focus();
+
+function txtTranform(s){
+    var res = "";
+    for(var i in s)
+        res += "<span>" + s[i] + "</span>";
+    return res;
+}
