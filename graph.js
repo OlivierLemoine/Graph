@@ -42,6 +42,8 @@ class Node{
             this.prevPosition.x = 0;
             this.prevPosition.y = 0;
 
+            updateNodeInCode(this, this.div.innerHTML, newPos.x - graph.offsetLeft, newPos.y);
+
             for(var i = 0; i < this.edges.length; i++)
                 this.edges[i].update();
         });
@@ -69,6 +71,7 @@ class Node{
         this.reset();
     }
     rename(name){
+        updateNodeInCode(this, this.div.innerHTML, this.div.style.left, this.div.style.top);
         this.div.innerHTML = name;
     }
     delete(){
@@ -209,6 +212,11 @@ function submitRename(){
 function del(e){
     hideContextMenu();
     currMenu.delete();
+    try{
+        deleteNode(currMenu)
+    }catch(e){
+        deleteEdge(currMenu);
+    }
 }
 
 

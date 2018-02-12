@@ -106,6 +106,7 @@ function exeCode(){
     } catch (e) {
         console.log(e);
     }
+    textField.focus();
 }
 textField.focus();
 
