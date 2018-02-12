@@ -11,6 +11,20 @@ textField.addEventListener("keydown", (e) => {
         case "Control": break;
         case "Alt": break;
         case "OS": break;
+        case "AltGraph": break;
+        case "Escape": break;
+        case "F1": break;
+        case "F2": break;
+        case "F3": break;
+        case "F4": break;
+        case "F5": break;
+        case "F6": break;
+        case "F7": break;
+        case "F8": break;
+        case "F9": break;
+        case "F10": break;
+        case "F11": break;
+        case "F12": break;
 
         case "Backspace":
             if(cursor.previousElementSibling != null)
@@ -88,7 +102,64 @@ textField.addEventListener("keydown", (e) => {
             elem.innerText = "&nbsp;";
             cursor.parentNode.insertBefore(elem, cursor);
 
+        case "{":
+            var elem = document.createElement("span");
+            elem.innerText = e.key;
+            cursor.parentNode.insertBefore(elem, cursor);
+            break;
+        case "}":
+            var elem = document.createElement("span");
+            elem.innerText = e.key;
+            cursor.parentNode.insertBefore(elem, cursor);
+            break;
+        case "&":
+            var elem = document.createElement("span");
+            elem.innerText = e.key;
+            cursor.parentNode.insertBefore(elem, cursor);
+            break;
+        case "#":
+            var elem = document.createElement("span");
+            elem.innerText = e.key;
+            cursor.parentNode.insertBefore(elem, cursor);
+            break;
+        case "'":
+            var elem = document.createElement("span");
+            elem.innerText = e.key;
+            cursor.parentNode.insertBefore(elem, cursor);
+            break;
+        case '"':
+            var elem = document.createElement("span");
+            elem.innerText = e.key;
+            cursor.parentNode.insertBefore(elem, cursor);
+            break;
+        case "(":
+            var elem = document.createElement("span");
+            elem.innerText = e.key;
+            cursor.parentNode.insertBefore(elem, cursor);
+            break;
+        case ")":
+            var elem = document.createElement("span");
+            elem.innerText = e.key;
+            cursor.parentNode.insertBefore(elem, cursor);
+            break;
+        case "[":
+            var elem = document.createElement("span");
+            elem.innerText = e.key;
+            cursor.parentNode.insertBefore(elem, cursor);
+            break;
+        case "]":
+            var elem = document.createElement("span");
+            elem.innerText = e.key;
+            cursor.parentNode.insertBefore(elem, cursor);
+            break;
+        case "|":
+            var elem = document.createElement("span");
+            elem.innerText = e.key;
+            cursor.parentNode.insertBefore(elem, cursor);
+            break;
+
         default:
+        console.log(e.key);
             if(e.ctrlKey)
                 break;
             var elem = document.createElement("span");
@@ -114,6 +185,9 @@ textField.addEventListener("click", (e) => {
 
 function exeCode(){
     clean();
+    console.log = function(m){
+        customConsole.innerHTML = m;
+    };
     try {
         eval(textField.textContent.trim()); 
     } catch (e) {
