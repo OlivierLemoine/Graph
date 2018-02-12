@@ -13,11 +13,11 @@ textField.addEventListener("keydown", (e) => {
         case "OS": break;
 
         case "Backspace":
-            if(cursor.previousSibling != null)
-                cursor.previousSibling.remove();
+            if(cursor.previousElementSibling != null)
+                cursor.previousElementSibling.remove();
             else if(textField.childNodes.length > 1){
                 var prevDiv = cursor.parentNode;
-                cursor.parentNode.previousSibling.appendChild(cursor);
+                cursor.parentNode.previousElementSibling.appendChild(cursor);
                 while (prevDiv.firstChild != null){
                     cursor.parentElement.appendChild(prevDiv.firstChild);
                 }
@@ -28,61 +28,66 @@ textField.addEventListener("keydown", (e) => {
             var prevDiv = cursor.parentNode;
             var newDiv = document.createElement("div");
 
-            while (cursor.nextSibling != null){
-                newDiv.appendChild(cursor.nextSibling);
+            while (cursor.nextElementSibling != null){
+                newDiv.appendChild(cursor.nextElementSibling);
             }
             newDiv.insertBefore(cursor, newDiv.firstChild);
-            prevDiv.parentNode.insertBefore(newDiv, prevDiv.nextSibling);
+            prevDiv.parentNode.insertBefore(newDiv, prevDiv.nextElementSibling);
             break;
 
         case "ArrowLeft":
-            if(cursor.previousSibling != null)
-                cursor.parentNode.insertBefore(cursor, cursor.previousSibling);
-            else if(cursor.parentNode.previousSibling != null)
-                cursor.parentNode.previousSibling.appendChild(cursor);
+            if(cursor.previousElementSibling != null)
+                cursor.parentNode.insertBefore(cursor, cursor.previousElementSibling);
+            else if(cursor.parentNode.previousElementSibling != null)
+                cursor.parentNode.previousElementSibling.appendChild(cursor);
             break;
         case "ArrowRight":
-            if(cursor.nextSibling != null)
-                cursor.parentNode.insertBefore(cursor.nextSibling, cursor);
-            else if(cursor.parentNode.nextSibling != null){
-                cursor.parentNode.nextSibling.appendChild(cursor);
+            if(cursor.nextElementSibling != null)
+                cursor.parentNode.insertBefore(cursor.nextElementSibling, cursor);
+            else if(cursor.parentNode.nextElementSibling != null){
+                cursor.parentNode.nextElementSibling.appendChild(cursor);
                 cursor.parentNode.insertBefore(cursor, cursor.parentNode.firstChild);
             }
             break;
         case "ArrowUp":
-            if(cursor.parentNode.previousSibling != null){
+            if(cursor.parentNode.previousElementSibling != null){
                 var count = 0;
                 var ptr = cursor;
-                while(ptr.previousSibling != null){
-                    ptr = ptr.previousSibling;
+                while(ptr.previousElementSibling != null){
+                    ptr = ptr.previousElementSibling;
                     count++;
                 }
-                ptr = cursor.parentNode.previousSibling.firstChild;
-                while(ptr.nextSibling != null && count > -1){
+                ptr = cursor.parentNode.previousElementSibling.firstElementChild;
+                while(ptr.nextElementSibling != null && count > 1){
                     count--;
-                    ptr = ptr.nextSibling;
+                    ptr = ptr.nextElementSibling;
                 }
-                ptr.parentNode.insertBefore(cursor, ptr);
+                ptr.parentNode.insertBefore(cursor, ptr.nextSibling);
             }
             
             break;
         case "ArrowDown":
-            if(cursor.parentNode.previousSibling != null){
+            if(cursor.parentNode.nextElementSibling != null){
                 var count = 0;
                 var ptr = cursor;
-                while(ptr.previousSibling != null){
-                    ptr = ptr.previousSibling;
+                while(ptr.previousElementSibling != null){
+                    ptr = ptr.previousElementSibling;
                     count++;
                 }
-                ptr = cursor.parentNode.nextSibling.firstChild;
-                while(ptr.nextSibling != null && count > -1){
+                ptr = cursor.parentNode.nextElementSibling.firstElementChild;
+                while(ptr.nextElementSibling != null && count > 1){
                     count--;
-                    ptr = ptr.nextSibling;
+                    ptr = ptr.nextElementSibling;
                 }
-                ptr.parentNode.insertBefore(cursor, ptr);
+                ptr.parentNode.insertBefore(cursor, ptr.nextSibling);
             }
             
             break;
+        case "Space":
+            var elem = document.createElement("span");
+            elem.innerText = "&nbsp;";
+            cursor.parentNode.insertBefore(elem, cursor);
+
         default:
             if(e.ctrlKey)
                 break;
@@ -94,8 +99,16 @@ textField.addEventListener("keydown", (e) => {
 });
 
 textField.addEventListener("click", (e) => {
-    if(e.button == 0 && e.target.parentNode.parentNode === textField){
-        e.target.parentNode.insertBefore(cursor, e.target);
+    if(e.button == 0){
+        if(e.target.parentNode.parentNode === textField){
+            e.target.parentNode.insertBefore(cursor, e.target);
+        } 
+        else if(e.target.parentNode === textField){
+            e.target.appendChild(cursor);
+        }
+        else if(e.target === textField){
+            e.target.lastElementChild.appendChild(cursor);
+        }
     }
 })
 

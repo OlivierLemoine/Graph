@@ -74,10 +74,13 @@ class Node{
         updateNodeInCode(this, this.div.innerHTML, this.div.style.left, this.div.style.top);
         this.div.innerHTML = name;
     }
-    delete(){
+    delete(isDelFromCode){
         this.div.remove();
-        for(var i = this.edges.length - 1; i > -1; i--)
+        for(var i = this.edges.length - 1; i > -1; i--){
+            if(isDelFromCode)
+                deleteEdge(this.edges[i]);
             this.edges[i].delete();
+        }
         nodes.splice(nodes.indexOf(this), 1);
     }
     deleteEdge(elem){
@@ -209,14 +212,13 @@ function submitRename(){
 }
 
 
-function del(e){
+function del(type){
     hideContextMenu();
-    currMenu.delete();
-    try{
-        deleteNode(currMenu)
-    }catch(e){
+    currMenu.delete(true);
+    if(type == "node")
+        deleteNode(currMenu);
+    else
         deleteEdge(currMenu);
-    }
 }
 
 

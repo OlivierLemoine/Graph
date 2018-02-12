@@ -21,14 +21,21 @@ function deleteNode(e){
     var pos = nodes.indexOf(e);
     var lineNb = findLineOfNode("addNode", pos);
     if(lineNb != undefined)
-        textField.children[lineNb].innerHTML = "";
+        deleteAt(lineNb);
 }
 
 function deleteEdge(e){
     var pos = edges.indexOf(e);
     var lineNb = findLineOfNode("addEdge", pos);
     if(lineNb != undefined)
-        textField.children[lineNb].innerHTML = "";
+        deleteAt(lineNb);
+}
+
+function deleteAt(line){
+    if(textField.children.length > 1)
+        textField.removeChild(textField.children[line]);
+    else
+    textField.children[lineNb].innerHTML = "";
 }
 
 function findLineOfNode(s, o){
