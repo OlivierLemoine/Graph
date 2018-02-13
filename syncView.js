@@ -1,7 +1,3 @@
-var textField = document.getElementById("textfield");
-var graph = document.getElementById("graph");
-var cursor = document.getElementById("cursor");
-
 function addTextToEditor(s){
     var txt = document.createElement("div");
     txt.innerHTML = txtTranform(s);
@@ -47,4 +43,10 @@ function findLineOfNode(s, o){
         }
     }
     return undefined;
+}
+
+function updateGraphFromCode(){
+    var txt = cursor.parentNode.textContent;
+    if(txt.includes("addNode") || txt.includes("addEdge"))
+        exeCode(false);
 }

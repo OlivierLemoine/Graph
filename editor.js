@@ -39,6 +39,7 @@ textField.addEventListener("keydown", (e) => {
             }
             break;
         case "Enter":
+            updateGraphFromCode();
             var prevDiv = cursor.parentNode;
             var newDiv = document.createElement("div");
 
@@ -64,6 +65,7 @@ textField.addEventListener("keydown", (e) => {
             }
             break;
         case "ArrowUp":
+            updateGraphFromCode();
             if(cursor.parentNode.previousElementSibling != null){
                 var count = 0;
                 var ptr = cursor;
@@ -72,6 +74,10 @@ textField.addEventListener("keydown", (e) => {
                     count++;
                 }
                 ptr = cursor.parentNode.previousElementSibling.firstElementChild;
+                if(ptr == null){
+                    cursor.parentNode.previousElementSibling.appendChild(cursor);
+                    break;
+                }
                 while(ptr.nextElementSibling != null && count > 1){
                     count--;
                     ptr = ptr.nextElementSibling;
@@ -81,6 +87,7 @@ textField.addEventListener("keydown", (e) => {
             
             break;
         case "ArrowDown":
+            updateGraphFromCode();
             if(cursor.parentNode.nextElementSibling != null){
                 var count = 0;
                 var ptr = cursor;
@@ -89,6 +96,10 @@ textField.addEventListener("keydown", (e) => {
                     count++;
                 }
                 ptr = cursor.parentNode.nextElementSibling.firstElementChild;
+                if(ptr == null){
+                    cursor.parentNode.nextElementSibling.appendChild(cursor);
+                    break;
+                }
                 while(ptr.nextElementSibling != null && count > 1){
                     count--;
                     ptr = ptr.nextElementSibling;
@@ -183,15 +194,17 @@ textField.addEventListener("click", (e) => {
     }
 })
 
-function exeCode(){
+function exeCode(isDisplay){
     clean();
     console.log = function(m){
-        customConsole.innerHTML = m;
+        customConsole.innerHTML += m;
+        customConsole.innerHTML += "<br>";
     };
     try {
         eval(textField.textContent.trim()); 
     } catch (e) {
-        console.log(e);
+        if(isDisplay)
+            console.log(e);
     }
     textField.focus();
 }

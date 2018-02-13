@@ -31,8 +31,10 @@
                 height: 100%;
             }
             #console{
+                border-top: solid 5px black;
                 float: left;
                 height: 20%;
+                width: 85%;
             }
             #textfield{
                 float: left;
@@ -136,7 +138,7 @@
     <body>
         <div id="editor">
             <div id="editorSideNav">
-                <button onclick="exeCode()">Execute Code</button>
+                <button onclick="exeCode(true)">Execute Code</button>
             </div>
             <div id="textfield" tabindex="0">
                 <div>

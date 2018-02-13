@@ -164,6 +164,7 @@ document.addEventListener("click", (e) => {
 });
 
 function clean(){
+    customConsole.innerHTML = "";
     for(var i = nodes.length - 1; i > -1; i--)
         nodes[i].delete();
 }
